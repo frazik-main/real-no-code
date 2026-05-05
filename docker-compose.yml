@@ -1,0 +1,42 @@
+services:
+  app:
+    build: .
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    environment:
+      SERVER_PORT: ${SERVER_PORT:-8080}
+
+      # H2 in-memory database
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL:-jdbc:h2:mem:realnocode;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:-org.h2.Driver}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME:-sa}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD:-}
+
+      SPRING_JPA_DATABASE_PLATFORM: ${SPRING_JPA_DATABASE_PLATFORM:-org.hibernate.dialect.H2Dialect}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO:-create-drop}
+      SPRING_JPA_SHOW_SQL: ${SPRING_JPA_SHOW_SQL:-false}
+
+      SPRING_H2_CONSOLE_ENABLED: ${SPRING_H2_CONSOLE_ENABLED:-true}
+      SPRING_H2_CONSOLE_PATH: ${SPRING_H2_CONSOLE_PATH:-/h2-console}
+
+      # AI provider: copilot | gemini | local
+      # NOTE: "gemini" requires AI_GEMINI_API_KEY to be set.
+      # Use "local" (LM Studio) if you prefer a provider that needs no API key.
+      AI_DEFAULT_PROVIDER: ${AI_DEFAULT_PROVIDER:-gemini}
+      AI_TIMEOUT_SECONDS: ${AI_TIMEOUT_SECONDS:-300}
+
+      # Copilot CLI
+      AI_COPILOT_COMMAND: ${AI_COPILOT_COMMAND:-copilot}
+
+      # Gemini API
+      AI_GEMINI_BASE_URL: ${AI_GEMINI_BASE_URL:-https://generativelanguage.googleapis.com}
+      AI_GEMINI_MODEL: ${AI_GEMINI_MODEL:-gemini-2.0-flash}
+      AI_GEMINI_API_KEY: ${AI_GEMINI_API_KEY:-}
+
+      # Local model via LM Studio (OpenAI-compatible)
+      AI_LM_STUDIO_BASE_URL: ${AI_LM_STUDIO_BASE_URL:-http://host.docker.internal:1234}
+      AI_LM_STUDIO_MODEL: ${AI_LM_STUDIO_MODEL:-local-model}
+
+    # Make host services (e.g. LM Studio) reachable via host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
