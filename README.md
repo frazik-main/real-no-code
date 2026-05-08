@@ -3,6 +3,8 @@
 Spring Boot app that generates standalone HTML pages from prompts and lets you continue exploring by clicking elements on the generated page.
 It uses the web server's request/response cycle to turn natural-language input into HTML interfaces for each request.
 
+See `ROADMAP.md` for the current (non-final) implementation roadmap.
+
 ## Providers
 The generator supports three provider values:
 
