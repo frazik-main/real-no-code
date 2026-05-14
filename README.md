@@ -114,7 +114,7 @@ Open `http://localhost:8080`.
 
 ## 🛡 The Security "Moat"
 
-Executing LLM-generated HTML/JS is a security nightmare (XSS, prompt injection). **Real No Code is a laboratory to solve this.** Currently designed for local-only prototyping and internal research.
+Executing LLM-generated HTML/JS is a security nightmare (XSS, prompt injection). **Real No Code is a laboratory to try solving this.** Currently designed for local-only prototyping and internal research.
 
 ---
 
