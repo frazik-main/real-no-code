@@ -1,139 +1,129 @@
-# Real No Code
+# 💠 Real No Code
 
 ![Real No Code business demo](./ai-bottles-business.gif)
 
-Spring Boot app that generates standalone HTML pages from prompts and lets you continue exploring by clicking elements on the generated page.
-It uses the web server's request/response cycle to turn natural-language input into HTML interfaces for each request.
+> **The UI is the Runtime.** An architecture where the backend doesn't exist and the interface is a hallucination.
 
-See `ROADMAP.md` for the current (non-final) implementation roadmap.
+---
 
-## Providers
-The generator supports three provider values:
+## 🚀 The Vision
 
-- `copilot` (Copilot CLI)
-- `gemini` (Google Gemini API)
-- `local` (LM Studio OpenAI-compatible endpoint)
+Most "No-Code" tools are just visual programming with more friction — you're still building deterministic logic.
 
-Provider can be selected in the launcher UI or sent as `provider` in POST requests.
+**Real No Code** is a subversive Proof of Concept that treats the LLM as a *just-in-time* rendering engine. Instead of a fixed UI, the application "hallucinates" the necessary interface, logic, and styling in real-time based on user intent. This moves software from **Static Pixels** to **Fluid Probability**.
 
-## Configuration
-Tracked config in `src/main/resources/application.properties` reads real values from environment variables or a local `.env` file.
+---
 
-### Local setup
-1. Copy `.env.example` to `.env`
-2. Fill in only the values you need, especially `AI_GEMINI_API_KEY`
-3. Keep `.env` private — it is ignored by git
+## 🏗 How It Works
 
-Example `.env` values:
+1. **Intent Capture** — The user provides a prompt (e.g., *"A CRM for a pet shop"*).
+2. **JIT Generation** — The orchestrator sends the intent to a provider (Gemini, Copilot, or Local LLM).
+3. **The Hallucination** — The LLM returns a standalone HTML/JS/CSS blob.
+4. **Zero Middleware** — The server serves this blob directly to the browser.
+5. **Recursive Exploration** — Clicking elements on the generated page triggers a new request, evolving the interface dynamically.
+
+---
+
+## 🛠 Project State: Research Laboratory
+
+This is a **Research Preview**. The goal is to prove that a zero-middleware architecture is possible by rendering LLM output directly to the browser.
+
+- **Short Term:** A lightning-fast "Business Idea Generator."
+- **Long Term:** Solving the "Security-Creativity Paradox" to allow generated interfaces to run safely in the wild.
+
+See [`ROADMAP.md`](./ROADMAP.md) for the current (non-final) trajectory.
+
+---
+
+## 🔌 Supported Providers
+
+| Provider | Description |
+|---|---|
+| `gemini` | Google Gemini API — recommended for speed |
+| `copilot` | GitHub Copilot CLI |
+| `local` | LM Studio / OpenAI-compatible local endpoint — total privacy |
+
+Select a provider in the launcher UI or pass it as `provider` in POST requests.
+
+---
+
+## 🏃 Getting Started
+
+### 1. Configuration
+
+Copy `.env.example` to `.env` and fill in the values you need:
 
 ```dotenv
-AI_DEFAULT_PROVIDER=copilot
-AI_TIMEOUT_SECONDS=300
-AI_COPILOT_COMMAND=copilot
-AI_GEMINI_API_KEY=your-real-key-here
-AI_GEMINI_MODEL=gemini-1.5-flash
+AI_DEFAULT_PROVIDER=gemini
+AI_GEMINI_API_KEY=your-key-here
+
+# Optional: local inference
 AI_LM_STUDIO_BASE_URL=http://localhost:1234
 AI_LM_STUDIO_MODEL=local-model
 ```
 
 You can also use real OS environment variables instead of `.env`.
 
-## Run
-
-### Local (Gradle)
-```bat
-gradlew.bat test
-gradlew.bat bootRun
-```
-
-Then open `http://localhost:8080`.
-
-### Docker
-
-Build and run with a single command:
-
-```bash
-docker build -t real-no-code .
-docker run --rm -p 8080:8080 \
-  -e AI_DEFAULT_PROVIDER=gemini \
-  -e AI_GEMINI_API_KEY=your-real-key-here \
-  real-no-code
-```
-
-Then open `http://localhost:8080`.
-
-### Docker Compose (recommended)
-
-1. Copy `.env.example` to `.env` and fill in the values you need (at minimum `AI_GEMINI_API_KEY` when using the Gemini provider).
-2. Start the app:
+### 2. Run with Docker Compose (Recommended)
 
 ```bash
 docker compose up --build
 ```
 
-3. Open `http://localhost:8080`.
+Open `http://localhost:8080` to begin.
 
-> **Local LM Studio:** when using `AI_DEFAULT_PROVIDER=local` the compose file automatically points `AI_LM_STUDIO_BASE_URL` to `http://host.docker.internal:1234`, so your host-side LM Studio instance is reachable from inside the container without any extra configuration.
+> **Local LM Studio:** when using `AI_DEFAULT_PROVIDER=local`, the compose file automatically points `AI_LM_STUDIO_BASE_URL` to `http://host.docker.internal:1234` — no extra configuration needed.
 
-## Controllers
-- `/` controller (`CopilotController`): serves the main launcher UI (`GET /`) and generates pages from form input (`POST /generate`).
-- `/business` controller (`BusinessController`): serves business-mode UI routes (`GET /business` and `GET /business/**`) and generates business idea pages (`POST /business/generate`).
+### 3. Run with Docker
 
+```bash
+docker build -t real-no-code .
+docker run --rm -p 8080:8080 \
+  -e AI_DEFAULT_PROVIDER=gemini \
+  -e AI_GEMINI_API_KEY=your-key-here \
+  real-no-code
+```
 
-# 💠 Project Real No Code (PoC)
+### 4. Run with Gradle (Local)
 
-> **The UI is the Runtime.** > software where backends don't exist, and interfaces are generated as "pure" HTML/JS on-demand by LLMs.
+```bat
+gradlew.bat test
+gradlew.bat bootRun
+```
 
----
-
-## 🚀 The Vision
-Most AI applications today use AI to *write code* that a developer then deploys. **Real No Code** skips the middleman. It treats the LLM as a "just-in-time" rendering engine.
-
-Instead of a fixed UI, the application "hallucinates" the necessary interface, logic, and styling in real-time based on user intent. This moves software from **Static Pixels** to **Fluid Probability.**
-
----
-
-## 🛠 Current State: Proof of Concept
-This is a **Research Preview**. The goal is to prove that a zero-middleware architecture is possible by rendering LLM output directly to every device via the browser.
-
-### Two-Phase Goal:
-* **Short Term (Local Prototyping):** A lightning-fast "Business Idea Generator." Describe a business tool (e.g., "I need a CRM for a pet shop with a local database"), and the UI/Logic is rendered instantly on your machine.
-* **Long Term (The Internet Scale):** Solving the "Security-Creativity Paradox" to allow these generated interfaces to run safely in the open wild.
+Open `http://localhost:8080`.
 
 ---
 
-## 🛡 The "Security Moat" (Experimental)
-We are fully aware that letting an LLM render raw HTML/JS is a security nightmare (XSS, Prompt Injection, etc.). **Real No Code is a laboratory to solve this.**
+## 🏛 Architecture
+
+- **Zero Backend** — No traditional database or server-side state logic.
+- **Pure HTML/JS** — No intermediate frameworks (React/Vue) required for the end-user.
+- **Local-First** — Designed to bridge to local LLMs (Ollama/LM Studio) for private execution.
+
+### Controllers
+
+| Route | Controller | Description |
+|---|---|---|
+| `GET /` | `CopilotController` | Main launcher UI |
+| `POST /generate` | `CopilotController` | Generate a page from form input |
+| `GET /business` | `BusinessController` | Business-mode UI |
+| `POST /business/generate` | `BusinessController` | Generate a business idea page |
 
 ---
 
-## 🏗 Architecture
-* **Zero Backend:** No traditional server-side logic or middleware.
-* **Pure HTML/JS:** No intermediate frameworks (React/Vue) required for the end-user.
-* **Local-First:** Designed to run with local LLMs (Ollama/Llama.cpp) via WebGPU for total privacy.
+## 🛡 The Security "Moat"
 
----
-
-## 🏃 Getting Started (Local Prototyping)
-Since this is an on-demand application generator, it requires zero setup for traditional "apps."
-
-1.  **Clone the repo:**
-    ```bash
-    git clone [https://github.com/your-username/real-no-code](https://github.com/your-username/real-no-code)
-    ```
-2.  **Connect your Local LLM:**
-    Ensure your local inference server (e.g., Ollama) is running on `localhost:11434`.
-3.  **Launch the Orchestrator:**
-    Start the app (gradlew.bat bootRun) and open http://localhost:8080.
-4.  **Prompt your Business Idea:**
-    > *"Generate a real-time analytics dashboard for my local log files."*
+Executing LLM-generated HTML/JS is a security nightmare (XSS, prompt injection). **Real No Code is a laboratory to solve this.** Currently designed for local-only prototyping and internal research.
 
 ---
 
 ## ⚖️ License
-This project is licensed under the **GPL-3.0**.
+
+Licensed under **GPL-3.0**.
 
 ---
 
 ## ⚠️ Disclaimer
-*This project executes AI-generated code. Running this outside of a local, isolated environment is currently discouraged. Use at your own risk while we work on the safety primitives.*
+
+*This project executes AI-generated code. Do not deploy to production. It is a tool for exploring the boundaries of software generation. Use at your own risk.*
